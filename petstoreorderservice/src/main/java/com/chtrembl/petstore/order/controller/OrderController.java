@@ -1,9 +1,11 @@
 package com.chtrembl.petstore.order.controller;
 
 import com.chtrembl.petstore.order.model.Order;
+import com.chtrembl.petstore.order.model.OrderItemsReserver;
 import com.chtrembl.petstore.order.model.Product;
 import com.chtrembl.petstore.order.service.OrderService;
 import com.chtrembl.petstore.order.service.ProductService;
+import com.chtrembl.petstore.order.service.OrderItemsReserverService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -24,8 +26,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.slf4j.MDC;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/petstoreorderservice/v2")
@@ -37,6 +43,7 @@ public class OrderController {
 
     private final OrderService orderService;
     private final ProductService productService;
+    private final OrderItemsReserverService orderItemsReserverService;
 
     @Operation(
             summary = "Place an order for a product",
@@ -62,7 +69,16 @@ public class OrderController {
         // Enrich order with product details from product service
         List<Product> availableProducts = productService.getAvailableProducts();
         orderService.enrichOrderWithProductDetails(updatedOrder, availableProducts);
-        
+
+        // Reserve order items via external service
+        try {
+            OrderItemsReserver reserverResponse = orderItemsReserverService.reserveOrderItems(updatedOrder);
+            log.info("Order items reserved successfully: {}", reserverResponse);
+        } catch (Exception e) {
+            log.error("Failed to reserve order items", e);
+            // Optionally, handle error (e.g., return error response or continue)
+        }
+
         log.info("Successfully processed order: {}", updatedOrder.getId());
 
         return ResponseEntity.ok(updatedOrder);

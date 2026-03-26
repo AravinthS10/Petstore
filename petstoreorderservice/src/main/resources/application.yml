@@ -9,6 +9,11 @@ petstore:
     product:
       url: ${PETSTOREPRODUCTSERVICE_URL:http://localhost:8082}
 
+order:
+  items:
+    reserver:
+      url: ${ORDERRESERVESERVICE_URL:http://localhost:8081/api/reserve}
+
 springdoc:
   api-docs:
     path: /api-docs
