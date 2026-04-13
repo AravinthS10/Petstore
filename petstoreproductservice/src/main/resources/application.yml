@@ -3,8 +3,8 @@ spring:
     name: petstoreproductservice
   datasource:
     url: jdbc:postgresql://petstoredb-pgsql.postgres.database.azure.com:5432/petstoreproductservice_db?sslmode=require
-    username: petstoreadminuser
-    password: Aruljothi@123
+    username: ${PetStoreAdminUserName}
+    password: ${PetStoreAdminUserPwd}
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
@@ -12,6 +12,7 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
+
 server:
   port: ${PETSTOREPRODUCTSERVICE_SERVER_PORT:8080}
 

@@ -3,8 +3,8 @@ spring:
     name: petstorepetservice
   datasource:
     url: jdbc:postgresql://petstoredb-pgsql.postgres.database.azure.com:5432/petstorepetservice_db?sslmode=require
-    username: petstoreadminuser
-    password: Aruljothi@123
+    username: ${PetStoreAdminUserName}
+    password: ${PetStoreAdminUserPwd}
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
