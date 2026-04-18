@@ -8,5 +8,7 @@ RUN mvn clean package
 FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
 COPY --from=build /app/target/*.jar app.jar
+COPY applicationinsights-agent-3.7.7.jar applicationinsights-agent.jar
 EXPOSE 8080
-CMD ["java", "-jar", "app.jar"]
+ENV APPLICATIONINSIGHTS_CONNECTION_STRING=InstrumentationKey=YOUR_INSTRUMENTATION_KEY
+ENTRYPOINT ["java", "-javaagent:/app/applicationinsights-agent.jar", "-jar", "app.jar"]
