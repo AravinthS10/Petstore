@@ -37,3 +37,10 @@ logging:
   level:
     root: INFO
     com.chtrembl: DEBUG
+
+azure:
+  cosmos:
+    uri: https://petstorecosmo.documents.azure.com:443/
+    database: petstoreOrderdetails
+    container: OrdersInfo
+    populate-query-metrics: true
